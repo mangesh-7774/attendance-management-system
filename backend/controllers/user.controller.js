@@ -262,7 +262,7 @@ const registerTeacher = async (req, res) => {
       "teacherData.empolyeeId": { $exists: true },
     }).sort({ "teacherData.empolyeeId": -1 });
 
-    let nextId = 1;
+    let nextId = 101;
 
     if (lastTeacher && lastTeacher.teacherData?.empolyeeId) {
       nextId = lastTeacher.teacherData.empolyeeId + 1;
