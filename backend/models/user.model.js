@@ -67,7 +67,7 @@ const userSchema = new mongoose.Schema({
     parentEmail: { type: String, unique: true, sparse: true },
   },
   teacherData: {
-    empolyeeId: { type: Number, unique: true },
+    empolyeeId: { type: Number, unique: true, sparse: true, },
   },
   adminData: {
     empolyeeId: { type: String, unique: true, sparse: true },
