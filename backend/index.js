@@ -27,10 +27,15 @@ app.use(
   }),
 );
 
+
 app.use("/api/user", userRouter);
 app.use("/api/class", classRouter);
 app.use("/api/attendance", attendanceRouter);
 app.use("/api/holiday", holidayRouter);
+
+app.get("/", (req, res) => {
+  res.send("Backend is running successfully 🚀");
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
