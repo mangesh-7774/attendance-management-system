@@ -494,9 +494,25 @@ const logOutUser = (req, res) => {
 
 const registerStudent = async (req, res) => {
   try {
-    const teacherDepartment = req.user.department;
-    const teacherClassName = req.user.className;
-    const teacherClassId = req.user.classId;
+    const teacher = req.user;
+
+    if (!teacher) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized user",
+      });
+    }
+
+    const teacherDepartment = teacher.department;
+    const teacherClassName = teacher.className;
+    const teacherClassId = teacher.classId;
+
+    if (!teacherClassId) {
+      return res.status(400).json({
+        success: false,
+        message: "Teacher is not assigned to any class",
+      });
+    }
 
     const { firstName, middleName, lastName, email } = req.body;
 
@@ -507,7 +523,10 @@ const registerStudent = async (req, res) => {
       });
     }
 
-    const existingUser = await User.findOne({ email });
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // check duplicate student
+    const existingUser = await User.findOne({ email: normalizedEmail });
 
     if (existingUser) {
       return res.status(400).json({
@@ -523,7 +542,7 @@ const registerStudent = async (req, res) => {
 
     let nextRollNumber = 1;
 
-    if (lastClassStudent && lastClassStudent.studentData?.rollNumber) {
+    if (lastClassStudent?.studentData?.rollNumber) {
       nextRollNumber = lastClassStudent.studentData.rollNumber + 1;
     }
 
@@ -541,15 +560,16 @@ const registerStudent = async (req, res) => {
 
     let nextStudentCode = 1001;
 
-    if (lastStudent && lastStudent.studentData?.studentCode) {
+    if (lastStudent?.studentData?.studentCode) {
       nextStudentCode = lastStudent.studentData.studentCode + 1;
     }
 
+    // create student
     const student = await User.create({
       firstName,
       middleName,
       lastName,
-      email,
+      email: normalizedEmail,
       role: "STUDENT",
       department: teacherDepartment,
       className: teacherClassName,
@@ -560,21 +580,31 @@ const registerStudent = async (req, res) => {
       },
     });
 
-    await Class.findByIdAndUpdate(teacherClassId, {
-      $push: { students: student._id },
-    });
+    await Class.findByIdAndUpdate(
+      teacherClassId,
+      { $push: { students: student._id } },
+      { new: true }
+    );
 
     return res.status(201).json({
       success: true,
       message: "Student registered successfully",
       student,
     });
+
   } catch (error) {
     console.error("Register Student Error:", error);
 
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "Duplicate email or student code",
+      });
+    }
+
     return res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "Server error while registering student",
     });
   }
 };
