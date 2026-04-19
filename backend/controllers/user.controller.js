@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import { createTempToken } from "../utils/temporaryToken.util.js";
 import Class from "../models/class.model.js";
 import { Attendance } from "../models/attendance.model.js";
+import { getNextSequence } from "../utils/getNextSequence.js";
 
 const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -525,7 +526,6 @@ const registerStudent = async (req, res) => {
 
     const normalizedEmail = email.toLowerCase().trim();
 
-    // check duplicate student
     const existingUser = await User.findOne({ email: normalizedEmail });
 
     if (existingUser) {
@@ -535,36 +535,18 @@ const registerStudent = async (req, res) => {
       });
     }
 
-    const lastClassStudent = await User.findOne({
-      role: "STUDENT",
-      classId: teacherClassId,
-    }).sort({ "studentData.rollNumber": -1 });
+    // ✅ SAFE COUNTERS (NO DUPLICATE POSSIBLE)
+    const rollNumber = await getNextSequence(`roll_${teacherClassId}`);
 
-    let nextRollNumber = 1;
-
-    if (lastClassStudent?.studentData?.rollNumber) {
-      nextRollNumber = lastClassStudent.studentData.rollNumber + 1;
-    }
-
-    if (nextRollNumber > 100) {
+    if (rollNumber > 100) {
       return res.status(400).json({
         success: false,
         message: "This batch is full",
       });
     }
 
-    const lastStudent = await User.findOne({
-      role: "STUDENT",
-      "studentData.studentCode": { $exists: true },
-    }).sort({ "studentData.studentCode": -1 });
+    const studentCode = await getNextSequence("student_code");
 
-    let nextStudentCode = 1001;
-
-    if (lastStudent?.studentData?.studentCode) {
-      nextStudentCode = lastStudent.studentData.studentCode + 1;
-    }
-
-    // create student
     const student = await User.create({
       firstName,
       middleName,
@@ -575,16 +557,14 @@ const registerStudent = async (req, res) => {
       className: teacherClassName,
       classId: teacherClassId,
       studentData: {
-        rollNumber: nextRollNumber,
-        studentCode: nextStudentCode,
+        rollNumber,
+        studentCode,
       },
     });
 
-    await Class.findByIdAndUpdate(
-      teacherClassId,
-      { $push: { students: student._id } },
-      { new: true }
-    );
+    await Class.findByIdAndUpdate(teacherClassId, {
+      $push: { students: student._id },
+    });
 
     return res.status(201).json({
       success: true,
@@ -595,16 +575,9 @@ const registerStudent = async (req, res) => {
   } catch (error) {
     console.error("Register Student Error:", error);
 
-    if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        message: "Duplicate email or student code",
-      });
-    }
-
     return res.status(500).json({
       success: false,
-      message: "Server error while registering student",
+      message: error.message,
     });
   }
 };
