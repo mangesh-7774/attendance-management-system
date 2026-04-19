@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import axios from "axios";
+import api from "../../util/axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -19,8 +19,8 @@ const TeacherEditStudent = () => {
 
   const fetchStudent = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/user/class-students`,
+      const res = await api.get(
+        `/api/user/class-students`,
         { withCredentials: true },
       );
 
@@ -57,8 +57,8 @@ const TeacherEditStudent = () => {
     try {
       setLoading(true);
 
-      const res = await axios.put(
-        `http://localhost:8000/api/user/update-student/${studentId}`,
+      const res = await api.put(
+        `/api/user/update-student/${studentId}`,
         formData,
         { withCredentials: true },
       );

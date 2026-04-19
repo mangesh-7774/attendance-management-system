@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import axios from "axios";
+import api from "../../util/axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +22,7 @@ const Login = () => {
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const res = await axios.get("http://localhost:8000/api/user/check-admin");
+      const res = await api.get("/api/user/check-admin");
 
       if (!res.data.adminExists) {
         navigate("/setup-admin");
@@ -38,8 +38,8 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const response = await axios.post(
-        "http://localhost:8000/api/user/login-user",
+      const response = await api.post(
+        "/api/user/login-user",
         { email, password },
         { withCredentials: true },
       );
@@ -65,8 +65,8 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:8000/api/user/send-otp",
+      const res = await api.post(
+        "/api/user/send-otp",
         { email },
         { withCredentials: true },
       );
@@ -86,8 +86,8 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:8000/api/user/verify-otp",
+      const res = await api.post(
+        "/api/user/verify-otp",
         { otp },
         { withCredentials: true },
       );
@@ -107,8 +107,8 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:8000/api/user/set-password",
+      const res = await api.post(
+        "/api/user/set-password",
         { password: newPassword },
         { withCredentials: true },
       );

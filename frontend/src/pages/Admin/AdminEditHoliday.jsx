@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import axios from "axios";
+import api from "../../util/axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -17,7 +17,7 @@ const AdminEditHoliday = () => {
     const fetchHoliday = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:8000/api/holiday/${id}`, {
+        const res = await api.get(`/api/holiday/${id}`, {
           withCredentials: true,
         });
 
@@ -52,8 +52,8 @@ const AdminEditHoliday = () => {
 
     try {
       setLoading(true);
-      const res = await axios.put(
-        `http://localhost:8000/api/holiday/update-holiday/${id}`,
+      const res = await api.put(
+        `/api/holiday/update-holiday/${id}`,
         formData,
         { withCredentials: true },
       );

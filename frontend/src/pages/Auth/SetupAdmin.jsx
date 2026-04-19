@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../util/axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -27,8 +27,8 @@ const SetupAdmin = () => {
   useEffect(() => {
     const checkAdmin = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:8000/api/user/check-admin",
+        const res = await api.get(
+          "/api/user/check-admin",
         );
 
         if (res.data.adminExists) {
@@ -49,8 +49,8 @@ const SetupAdmin = () => {
       setLoading(true);
       setMessage("");
 
-      const res = await axios.post(
-        "http://localhost:8000/api/user/register-admin",
+      const res = await api.post(
+        "/api/user/register-admin",
         formData,
       );
 

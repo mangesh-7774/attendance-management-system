@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 
 const TeacherDetainedList = () => {
   const [criteria, setCriteria] = useState(75);
@@ -11,8 +11,8 @@ const TeacherDetainedList = () => {
     try {
       setLoading(true);
 
-      const res = await axios.get(
-        `http://localhost:8000/api/attendance/detained-list?criteria=${criteria}`,
+      const res = await api.get(
+        `/api/attendance/detained-list?criteria=${criteria}`,
         {
           params: { criteria: value },
           withCredentials: true,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 import { saveAs } from "file-saver";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -21,8 +21,8 @@ const TeacherReport = () => {
       setLoading(true);
       setHasSearched(true);
       setErrorMessage("");
-      const res = await axios.get(
-        "http://localhost:8000/api/attendance/generate-attendance-report-teacher",
+      const res = await api.get(
+        "/api/attendance/generate-attendance-report-teacher",
         { params: { startDate, endDate }, withCredentials: true },
       );
       setReport(res.data);
@@ -38,8 +38,8 @@ const TeacherReport = () => {
 
   const downloadPDF = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/attendance/download-formal-report",
+      const res = await api.get(
+        "/api/attendance/download-formal-report",
         {
           params: { startDate, endDate, type: "pdf" },
           responseType: "blob",
@@ -57,8 +57,8 @@ const TeacherReport = () => {
 
   const downloadExcel = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/attendance/download-formal-report",
+      const res = await api.get(
+        "/api/attendance/download-formal-report",
         {
           params: { startDate, endDate, type: "excel" },
           responseType: "blob",

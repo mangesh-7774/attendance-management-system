@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import axios from "axios";
+import api from "../../util/axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
@@ -27,8 +27,8 @@ const AdminTeachers = () => {
   const fetchTeachers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(
-        "http://localhost:8000/api/user/get-all-teachers",
+      const res = await api.get(
+        "/api/user/get-all-teachers",
         { withCredentials: true },
       );
       setTeachers(res.data.allTeachers || []);
@@ -51,8 +51,8 @@ const AdminTeachers = () => {
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(
-        `http://localhost:8000/api/user/delete-teacher/${selectedTeacher._id}`,
+      await api.delete(
+        `/api/user/delete-teacher/${selectedTeacher._id}`,
         { withCredentials: true },
       );
 
@@ -85,8 +85,8 @@ const AdminTeachers = () => {
 
   const updateTeacher = async () => {
     try {
-      await axios.put(
-        `http://localhost:8000/api/user/update-teacher/${selectedTeacher._id}`,
+      await api.put(
+        `/api/user/update-teacher/${selectedTeacher._id}`,
         editData,
         { withCredentials: true },
       );

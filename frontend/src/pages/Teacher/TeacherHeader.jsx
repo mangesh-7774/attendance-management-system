@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../util/axios";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -11,8 +11,8 @@ const TeacherHeader = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(
-        "http://localhost:8000/api/user/logout",
+      await api.post(
+        "/api/user/logout",
         {},
         { withCredentials: true },
       );

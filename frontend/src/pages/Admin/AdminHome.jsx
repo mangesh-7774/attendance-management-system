@@ -11,7 +11,7 @@ import {
   Legend,
 } from "recharts";
 import { motion } from "framer-motion";
-import axios from "axios";
+import api from "../../util/axios";
 import { useNavigate } from "react-router-dom";
 
 const AdminHome = () => {
@@ -25,8 +25,8 @@ const AdminHome = () => {
     try {
       setLoading(true);
 
-      const response = await axios.get(
-        "http://localhost:8000/api/attendance/all-students-today-attendance",
+      const response = await api.get(
+        "/api/attendance/all-students-today-attendance",
         { withCredentials: true },
       );
 
@@ -46,7 +46,6 @@ const AdminHome = () => {
     fetchAttendance();
   }, []);
 
-  // 🔥 Calculations
   const totalStudents = records.length;
   const presentCount = records.filter((r) => r.status === "PRESENT").length;
   const absentCount = records.filter((r) => r.status === "ABSENT").length;

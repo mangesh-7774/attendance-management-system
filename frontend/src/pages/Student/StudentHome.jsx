@@ -10,7 +10,7 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
-import axios from "axios";
+import api from "../../util/axios";
 import { useNavigate } from "react-router-dom";
 
 const StudentHome = () => {
@@ -22,8 +22,8 @@ const StudentHome = () => {
   const fetchAttendance = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        "http://localhost:8000/api/attendance/student-attendance-records",
+      const response = await api.get(
+        "/api/attendance/student-attendance-records",
         { withCredentials: true },
       );
       if (response.data.success) {

@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-
 import { useState } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 import { useNavigate } from "react-router-dom";
 
 const TeacherAddStudent = () => {
@@ -30,8 +29,8 @@ const TeacherAddStudent = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:8000/api/user/register-student",
+      const res = await api.post(
+        "/api/user/register-student",
         formData,
         { withCredentials: true },
       );

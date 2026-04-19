@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 import { saveAs } from "file-saver";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -19,8 +19,8 @@ const AdminReports = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:8000/api/attendance/attendance-classes",
+        const res = await api.get(
+          "/api/attendance/attendance-classes",
           { withCredentials: true },
         );
         setClasses(res.data.classes);
@@ -42,8 +42,8 @@ const AdminReports = () => {
       setHasSearched(true);
       setErrorMessage("");
 
-      const res = await axios.get(
-        "http://localhost:8000/api/attendance/generate-attendance-report-admin",
+      const res = await api.get(
+        "/api/attendance/generate-attendance-report-admin",
         {
           params: { classId: selectedClass, startDate, endDate },
           withCredentials: true,
@@ -64,8 +64,8 @@ const AdminReports = () => {
   const downloadPDF = async () => {
     if (!selectedClass || !startDate || !endDate) return;
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/attendance/download-formal-report",
+      const res = await api.get(
+        "/api/attendance/download-formal-report",
         {
           params: { classId: selectedClass, startDate, endDate, type: "pdf" },
           responseType: "blob",
@@ -85,8 +85,8 @@ const AdminReports = () => {
   const downloadExcel = async () => {
     if (!selectedClass || !startDate || !endDate) return;
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/attendance/download-formal-report",
+      const res = await api.get(
+        "/api/attendance/download-formal-report",
         {
           params: { classId: selectedClass, startDate, endDate, type: "excel" },
           responseType: "blob",

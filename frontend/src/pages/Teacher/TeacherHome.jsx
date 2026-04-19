@@ -12,7 +12,7 @@ import {
 } from "recharts";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import axios from "axios";
+import api from "../../util/axios";
 import { useNavigate } from "react-router-dom";
 
 const TeacherHome = () => {
@@ -26,8 +26,8 @@ const TeacherHome = () => {
     try {
       setLoading(true);
 
-      const response = await axios.get(
-        "http://localhost:8000/api/attendance/class-attendance",
+      const response = await api.get(
+        "/api/attendance/class-attendance",
         { withCredentials: true },
       );
 

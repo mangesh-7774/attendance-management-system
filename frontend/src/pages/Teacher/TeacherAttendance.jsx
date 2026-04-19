@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useRef, useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 import { motion, AnimatePresence } from "framer-motion";
 
 const TeacherAttendance = () => {
@@ -23,8 +23,8 @@ const TeacherAttendance = () => {
 
   const fetchStudents = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/user/class-students",
+      const res = await api.get(
+        "/api/user/class-students",
         { withCredentials: true },
       );
 
@@ -87,8 +87,8 @@ const TeacherAttendance = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:8000/api/attendance/mark-attendance",
+      const res = await api.post(
+        "/api/attendance/mark-attendance",
         payload,
         { withCredentials: true },
       );

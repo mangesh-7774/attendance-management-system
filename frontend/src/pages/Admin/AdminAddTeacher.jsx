@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../util/axios";
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -34,8 +34,8 @@ const AdminAddTeacher = () => {
       setMessage("");
       setIsError(false);
 
-      const response = await axios.post(
-        "http://localhost:8000/api/user/register-teacher",
+      const response = await api.post(
+        "/api/user/register-teacher",
         formData,
         { withCredentials: true },
       );

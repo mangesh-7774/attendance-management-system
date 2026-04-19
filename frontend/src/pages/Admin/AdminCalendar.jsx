@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import axios from "axios";
+import api from "../../util/axios";
 import React, { useEffect, useState } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
@@ -25,8 +25,8 @@ const AdminCalendar = () => {
   const fetchHolidays = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(
-        "http://localhost:8000/api/holiday/get-holidays",
+      const res = await api.get(
+        "/api/holiday/get-holidays",
         { withCredentials: true },
       );
       if (res.data.success) {
@@ -49,8 +49,8 @@ const AdminCalendar = () => {
     if (!window.confirm("Are you sure you want to delete this holiday?"))
       return;
     try {
-      await axios.delete(
-        `http://localhost:8000/api/holiday/cancel-holiday/${id}`,
+      await api.delete(
+        `/api/holiday/cancel-holiday/${id}`,
         { withCredentials: true },
       );
       fetchHolidays();

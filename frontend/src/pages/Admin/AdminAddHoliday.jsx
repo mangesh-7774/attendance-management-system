@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 import { useNavigate } from "react-router-dom";
 
 const AdminAddHoliday = () => {
@@ -25,8 +25,8 @@ const AdminAddHoliday = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post(
-        "http://localhost:8000/api/holiday/add-holiday",
+      const res = await api.post(
+        "/api/holiday/add-holiday",
         formData,
         { withCredentials: true },
       );

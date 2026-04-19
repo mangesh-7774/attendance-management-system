@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../util/axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -34,8 +34,8 @@ const VerifyAccount = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:8000/api/user/send-otp",
+      const res = await api.post(
+        "/api/user/send-otp",
         { email },
         { withCredentials: true },
       );
@@ -59,8 +59,8 @@ const VerifyAccount = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:8000/api/user/verify-otp",
+      const res = await api.post(
+        "/api/user/verify-otp",
         { otp },
         { withCredentials: true },
       );
@@ -84,8 +84,8 @@ const VerifyAccount = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:8000/api/user/set-password",
+      const res = await api.post(
+        "/api/user/set-password",
         { password },
         { withCredentials: true },
       );

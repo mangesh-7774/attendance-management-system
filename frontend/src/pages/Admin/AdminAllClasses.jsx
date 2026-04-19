@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import axios from "axios";
+import api from "../../util/axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Users, User, Calendar } from "lucide-react";
@@ -14,8 +14,8 @@ const AdminAllClasses = () => {
       setLoading(true);
       setStatus("");
 
-      const res = await axios.get(
-        "http://localhost:8000/api/class/all-classes",
+      const res = await api.get(
+        "/api/class/all-classes",
         { withCredentials: true },
       );
 

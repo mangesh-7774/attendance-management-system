@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 import dayjs from "dayjs";
 import { FiAlertCircle } from "react-icons/fi";
 
@@ -13,8 +13,8 @@ const StudentAbsentDays = () => {
 
   const fetchAttendanceMonths = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/attendance/featech-attenance-months",
+      const res = await api.get(
+        "api/attendance/featech-attenance-months",
         { withCredentials: true },
       );
 
@@ -37,8 +37,8 @@ const StudentAbsentDays = () => {
     try {
       setLoading(true);
 
-      const response = await axios.get(
-        "http://localhost:8000/api/attendance/student-attendance-records",
+      const response = await api.get(
+        "/api/attendance/student-attendance-records",
         { withCredentials: true },
       );
 

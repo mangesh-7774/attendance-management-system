@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../util/axios";
 import React, { useEffect, useState } from "react";
 
 const TeacherPresentStudents = () => {
@@ -10,8 +10,8 @@ const TeacherPresentStudents = () => {
     try {
       setLoading(true);
 
-      const response = await axios.get(
-        "http://localhost:8000/api/attendance/class-attendance",
+      const response = await api.get(
+        "/api/attendance/class-attendance",
         { withCredentials: true },
       );
 

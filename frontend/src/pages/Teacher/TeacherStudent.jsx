@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 import { Link } from "react-router-dom";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
@@ -14,8 +14,8 @@ const TeacherStudent = () => {
     try {
       setLoading(true);
 
-      const response = await axios.get(
-        "http://localhost:8000/api/user/class-students",
+      const response = await api.get(
+        "/api/user/class-students",
         { withCredentials: true },
       );
 
@@ -39,8 +39,8 @@ const TeacherStudent = () => {
 
       if (!confirmDelete) return;
 
-      const response = await axios.delete(
-        `http://localhost:8000/api/user/delete-student/${studentId}`,
+      const response = await api.delete(
+        `/api/user/delete-student/${studentId}`,
         { withCredentials: true },
       );
 
