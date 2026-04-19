@@ -46,8 +46,8 @@ const sendOtpToUser = async (req, res) => {
 
     res.cookie("verifyToken", tempToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 10 * 60 * 1000,
     });
 
@@ -227,7 +227,6 @@ const checkAdminExists = async (req, res) => {
   return res.json({ adminExists: false });
 };
 
-
 const registerTeacher = async (req, res) => {
   try {
     const adminDepartment = req.user.department;
@@ -268,7 +267,6 @@ const registerTeacher = async (req, res) => {
       nextId = lastTeacher.teacherData.empolyeeId + 1;
     }
 
-
     const teacher = await User.create({
       firstName,
       middleName,
@@ -277,7 +275,7 @@ const registerTeacher = async (req, res) => {
       role: "TEACHER",
       department: adminDepartment,
       teacherData: {
-        empolyeeId: nextId, 
+        empolyeeId: nextId,
       },
     });
 
@@ -297,7 +295,6 @@ const registerTeacher = async (req, res) => {
       teacher,
       class: newClass,
     });
-
   } catch (error) {
     console.error(error);
 
@@ -314,7 +311,6 @@ const registerTeacher = async (req, res) => {
     });
   }
 };
-
 
 const updateTeacher = async (req, res) => {
   try {
@@ -474,6 +470,7 @@ const loginUser = async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: "none",
   };
 
   return res.status(200).cookie("token", token, options).json({
@@ -662,7 +659,6 @@ const deleteStudent = async (req, res) => {
     });
   }
 };
-
 
 const getAllStudents = async (req, res) => {
   try {

@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: true,
+    origin: "https://attendance-management-system-tau-five.vercel.app",
     credentials: true,
   }),
 );
