@@ -535,7 +535,10 @@ const registerStudent = async (req, res) => {
       });
     }
 
-    // ✅ SAFE COUNTERS (NO DUPLICATE POSSIBLE)
+    // ===============================
+    // ✅ FIXED COUNTER LOGIC
+    // ===============================
+
     const rollNumber = await getNextSequence(`roll_${teacherClassId}`);
 
     if (rollNumber > 100) {
@@ -545,7 +548,8 @@ const registerStudent = async (req, res) => {
       });
     }
 
-    const studentCode = await getNextSequence("student_code");
+    // 🔥 IMPORTANT FIX: studentCode starts from 1001
+    const studentCode = (await getNextSequence("student_code")) + 1000;
 
     const student = await User.create({
       firstName,
@@ -562,9 +566,11 @@ const registerStudent = async (req, res) => {
       },
     });
 
-    await Class.findByIdAndUpdate(teacherClassId, {
-      $push: { students: student._id },
-    });
+    await Class.findByIdAndUpdate(
+      teacherClassId,
+      { $push: { students: student._id } },
+      { new: true }
+    );
 
     return res.status(201).json({
       success: true,
@@ -575,9 +581,16 @@ const registerStudent = async (req, res) => {
   } catch (error) {
     console.error("Register Student Error:", error);
 
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "Duplicate email or student code",
+      });
+    }
+
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error while registering student",
     });
   }
 };
