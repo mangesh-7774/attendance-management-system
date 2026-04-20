@@ -535,9 +535,6 @@ const registerStudent = async (req, res) => {
       });
     }
 
-    // ===============================
-    // ✅ FIXED COUNTER LOGIC
-    // ===============================
 
     const rollNumber = await getNextSequence(`roll_${teacherClassId}`);
 
@@ -548,8 +545,7 @@ const registerStudent = async (req, res) => {
       });
     }
 
-    // 🔥 IMPORTANT FIX: studentCode starts from 1001
-    const studentCode = (await getNextSequence("student_code")) + 1000;
+   const studentCode = await getNextSequence("student_code");
 
     const student = await User.create({
       firstName,
