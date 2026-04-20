@@ -535,8 +535,11 @@ const registerStudent = async (req, res) => {
       });
     }
 
+    let rollNumber = await getNextSequence(`roll_${teacherClassId}`);
 
-    const rollNumber = await getNextSequence(`roll_${teacherClassId}`);
+    if (!rollNumber || rollNumber < 1) {
+      rollNumber = 1;
+    }
 
     if (rollNumber > 100) {
       return res.status(400).json({
@@ -545,7 +548,7 @@ const registerStudent = async (req, res) => {
       });
     }
 
-   const studentCode = await getNextSequence("student_code");
+    const studentCode = 1000 + await getNextSequence("student_code");
 
     const student = await User.create({
       firstName,
@@ -565,7 +568,7 @@ const registerStudent = async (req, res) => {
     await Class.findByIdAndUpdate(
       teacherClassId,
       { $push: { students: student._id } },
-      { new: true }
+      { new: true },
     );
 
     return res.status(201).json({
@@ -573,7 +576,6 @@ const registerStudent = async (req, res) => {
       message: "Student registered successfully",
       student,
     });
-
   } catch (error) {
     console.error("Register Student Error:", error);
 
