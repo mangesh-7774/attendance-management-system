@@ -13,10 +13,9 @@ const StudentAbsentDays = () => {
 
   const fetchAttendanceMonths = async () => {
     try {
-      const res = await api.get(
-        "api/attendance/featech-attenance-months",
-        { withCredentials: true },
-      );
+      const res = await api.get("api/attendance/featech-attenance-months", {
+        withCredentials: true,
+      });
 
       if (res.data.success) {
         const fetchedMonths = res.data.months;
@@ -43,9 +42,9 @@ const StudentAbsentDays = () => {
       );
 
       if (response.data.success) {
-        const filtered = response.data.absentRecords.filter(
-          (r) => dayjs(r.date).format("YYYY-MM") === month,
-        );
+        const filtered = response.data.attendanceDetails
+          .filter((r) => r.status === "ABSENT")
+          .filter((r) => dayjs(r.date).format("YYYY-MM") === month);
 
         setAbsentRecords(filtered);
       } else {

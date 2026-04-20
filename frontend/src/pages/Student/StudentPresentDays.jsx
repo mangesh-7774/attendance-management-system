@@ -13,10 +13,9 @@ const StudentPresentDays = () => {
 
   const fetchAttendanceMonths = async () => {
     try {
-      const res = await api.get(
-        "/api/attendance/featech-attenance-months",
-        { withCredentials: true },
-      );
+      const res = await api.get("/api/attendance/featech-attenance-months", {
+        withCredentials: true,
+      });
 
       if (res.data.success) {
         const fetchedMonths = res.data.months;
@@ -43,9 +42,9 @@ const StudentPresentDays = () => {
       );
 
       if (response.data.success) {
-        const filtered = response.data.presentRecords.filter(
-          (r) => dayjs(r.date).format("YYYY-MM") === month,
-        );
+        const filtered = response.data.attendanceDetails
+          .filter((r) => r.status === "PRESENT")
+          .filter((r) => dayjs(r.date).format("YYYY-MM") === month);
 
         setPresentRecords(filtered);
       } else {
